@@ -5,10 +5,15 @@
  */
 export async function onRequest({ request, params }) {
     const url = new URL(request.url);
-    let pathSegments = params.path.filter(segment => segment.length > 0);
+    const pathname = url.pathname;
+    // FIX: Handle cases where params.path might be undefined (like root URL requests)
+    let pathSegments = (params.path || []).filter(segment => segment.length > 0); 
+
+    console.log(`Function received request for: ${pathname}`);
 
     // Handle root / request - Show a simple landing page
     if (pathSegments.length === 0) {
+        console.log("Serving root page.");
         return new Response(`
             <!DOCTYPE html>
             <html lang="en" style="font-family: sans-serif; background-color: #f0f0f0; color: #333;">
