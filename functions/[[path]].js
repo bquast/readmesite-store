@@ -1,48 +1,31 @@
 /**
- * Cloudflare Pages Function to handle theme requests for store.readme.site.
- * It routes /themename/asset to /internal-assets/themename/asset 
- * and relies on _routes.json (in ROOT) to serve /internal-assets/* statically.
+ * Cloudflare Pages Function - ASSETS.fetch approach
  */
-export async function onRequest({ request, params }) {
+export async function onRequest({ request, env, params }) {
     const url = new URL(request.url);
     const pathname = url.pathname;
-    // FIX: Handle cases where params.path might be undefined (like root URL requests)
-    let pathSegments = (params.path || []).filter(segment => segment.length > 0); 
+    let pathSegments = (params.path || []).filter(segment => segment.length > 0);
 
-    console.log(`Function received request for: ${pathname}`);
+    console.log(`[ASSETS] Request for: ${pathname}`);
 
-    // Handle root / request - Show a simple landing page
+    // Handle root / request
     if (pathSegments.length === 0) {
-        console.log("Serving root page.");
+        console.log("[ASSETS] Serving root.");
         return new Response(`
             <!DOCTYPE html>
-            <html lang="en" style="font-family: sans-serif; background-color: #f0f0f0; color: #333;">
-            <head>
-               <meta charset="UTF-8">
-               <meta name="viewport" content="width=device-width, initial-scale=1.0">
-               <title>READMEsite Themes</title>
-               <style>
-                   body { max-width: 600px; margin: 50px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-                   a { color: #0366d6; }
-                   code { background-color: #eef; padding: 2px 5px; border-radius: 3px; }
-               </style>
-            </head>
+            <html lang="en" style="font-family: sans-serif;">
+            <head><title>READMEsite Themes</title></head>
             <body>
                 <h1>Welcome to READMEsite Themes Store!</h1>
-                <p>This is where themes for <a href="https://readme.site" target="_blank">READMEsite</a> live.</p>
-                <p>Available themes:</p>
-                <ul>
-                    <li><a href="/darkmode/theme.json">darkmode</a> (Global)</li>
-                </ul>
-                <p>You can use a theme with the command: <code>npx readmesite --theme darkmode</code></p>
+                <p>Available themes: <a href="/darkmode/theme.json">darkmode</a></p>
             </body>
             </html>`, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
     }
 
-    // If it somehow still gets an internal path, 404. It shouldn't if _routes.json works.
-    if (pathSegments[0] === 'internal-assets') {
-        console.error(`Function was hit by internal path: ${url.pathname}. _routes.json might be wrong.`);
-        return new Response(`Not Found - Internal path hit function.`, { status: 404 });
+    // If request is for /themes/ - it MUST NOT hit here. If it does, ASSETS is re-routing.
+    if (pathSegments[0] === 'themes') {
+        console.error(`[ASSETS] Function caught /themes/ path: ${pathname}. ASSETS.fetch is likely re-routing!`);
+        return new Response(`Error: /themes/ path hit function.`, { status: 500 });
     }
 
     if (pathSegments[0].startsWith('@')) {
@@ -50,7 +33,7 @@ export async function onRequest({ request, params }) {
     }
 
     if (pathSegments.length !== 2) {
-        return new Response(`Not Found - Invalid path. Expected /themename/asset. Got: ${url.pathname}`, { status: 404 });
+        return new Response(`Not Found: Invalid path. Expected /themename/asset. Got: ${pathname}`, { status: 404 });
     }
 
     const theme = pathSegments[0];
@@ -60,17 +43,26 @@ export async function onRequest({ request, params }) {
         return new Response(`Theme '${theme}' not found.`, { status: 404 });
     }
 
-    // Rewrite the path to the internal, static-only path
-    const assetPath = `/internal-assets/${theme}/${assetName}`;
-    console.log(`Rewriting '${url.pathname}' to static path: '${assetPath}'`);
+    // Rewrite to /themes/
+    const assetPath = `/themes/<span class="math-inline">\{theme\}/</span>{assetName}`;
+    console.log(`[ASSETS] Rewriting '<span class="math-inline">\{pathname\}' to '</span>{assetPath}' and fetching via env.ASSETS.fetch.`);
 
     try {
-        const newUrl = new URL(assetPath, url.origin);
-        const newRequest = new Request(newUrl.toString(), request);
-        // Fetch the rewritten path - _routes.json should make this hit static assets.
-        return fetch(newRequest);
+        const assetUrl = new URL(assetPath, url.origin);
+        const assetRequest = new Request(assetUrl.toString(), request);
+
+        // Fetch using ASSETS.fetch
+        const assetResponse = await env.ASSETS.fetch(assetRequest);
+
+        if (assetResponse.status === 404) {
+             console.error(`[ASSETS] env.ASSETS.fetch got 404 for: ${assetPath}. Are files in public/themes/?`);
+             return new Response(`ASSETS.fetch 404 for ${assetPath}.`, { status: 404 });
+        }
+        console.log(`[ASSETS] env.ASSETS.fetch successful for ${assetPath}`);
+        return assetResponse;
+
     } catch (e) {
-        console.error(`Error during fetch for ${assetPath}:`, e);
-        return new Response("Internal Server Error during fetch.", { status: 500 });
+         console.error(`[ASSETS] Error during env.ASSETS.fetch for ${assetPath}:`, e);
+         return new Response(`Internal Server Error during ASSETS.fetch: ${e.message}`, { status: 500 });
     }
 }
