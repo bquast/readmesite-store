@@ -1,68 +1,40 @@
-/**
- * Cloudflare Pages Function - ASSETS.fetch approach
- */
-export async function onRequest({ request, env, params }) {
+export async function onRequest({ request, env }) { // Simplified params
     const url = new URL(request.url);
     const pathname = url.pathname;
-    let pathSegments = (params.path || []).filter(segment => segment.length > 0);
 
-    console.log(`[ASSETS] Request for: ${pathname}`);
+    console.log(`[SIMPLE] Request for: ${pathname}`);
 
-    // Handle root / request
-    if (pathSegments.length === 0) {
-        console.log("[ASSETS] Serving root.");
-        return new Response(`
-            <!DOCTYPE html>
-            <html lang="en" style="font-family: sans-serif;">
-            <head><title>READMEsite Themes</title></head>
-            <body>
-                <h1>Welcome to READMEsite Themes Store!</h1>
-                <p>Available themes: <a href="/darkmode/theme.json">darkmode</a></p>
-            </body>
-            </html>`, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
-    }
+    // Only handle /darkmode/theme.json for now
+    if (pathname === '/darkmode/theme.json') {
+        // TRY THE PATH *WITHOUT* LEADING SLASH
+        const assetPath = 'themes/darkmode/theme.json'; 
+        console.log(`[SIMPLE] Attempting ASSETS.fetch for: '${assetPath}'`);
+        try {
+            // Fetch needs a full URL, but ASSETS might use the path internally.
+            // Let's construct the request based on the *internal* path idea.
+            // We still need a valid URL for the Request object, use the original.
+            // But we need to tell ASSETS.fetch WHAT to fetch.
+            // The docs imply ASSETS.fetch(request) uses the request's URL.
+            // So we NEED to give it a request with the /themes/ path.
+            
+            const internalAssetUrl = new URL(`/themes/darkmode/theme.json`, url.origin);
+            const assetRequest = new Request(internalAssetUrl.toString(), request);
+            
+            const assetResponse = await env.ASSETS.fetch(assetRequest);
 
-    // If request is for /themes/ - it MUST NOT hit here. If it does, ASSETS is re-routing.
-    if (pathSegments[0] === 'themes') {
-        console.error(`[ASSETS] Function caught /themes/ path: ${pathname}. ASSETS.fetch is likely re-routing!`);
-        return new Response(`Error: /themes/ path hit function.`, { status: 500 });
-    }
+            if (assetResponse.status === 404) {
+                 console.error(`[SIMPLE] ASSETS.fetch got 404 for: ${internalAssetUrl.pathname}`);
+                 return new Response(`ASSETS.fetch 404.`, { status: 404 });
+            }
+            console.log(`[SIMPLE] ASSETS.fetch OK.`);
+            return assetResponse;
 
-    if (pathSegments[0].startsWith('@')) {
-        return new Response(`User themes not yet supported.`, { status: 501 });
-    }
-
-    if (pathSegments.length !== 2) {
-        return new Response(`Not Found: Invalid path. Expected /themename/asset. Got: ${pathname}`, { status: 404 });
-    }
-
-    const theme = pathSegments[0];
-    const assetName = pathSegments[1];
-
-    if (theme !== 'darkmode') {
-        return new Response(`Theme '${theme}' not found.`, { status: 404 });
-    }
-
-    // Rewrite to /themes/
-    const assetPath = `/themes/<span class="math-inline">\{theme\}/</span>{assetName}`;
-    console.log(`[ASSETS] Rewriting '<span class="math-inline">\{pathname\}' to '</span>{assetPath}' and fetching via env.ASSETS.fetch.`);
-
-    try {
-        const assetUrl = new URL(assetPath, url.origin);
-        const assetRequest = new Request(assetUrl.toString(), request);
-
-        // Fetch using ASSETS.fetch
-        const assetResponse = await env.ASSETS.fetch(assetRequest);
-
-        if (assetResponse.status === 404) {
-             console.error(`[ASSETS] env.ASSETS.fetch got 404 for: ${assetPath}. Are files in public/themes/?`);
-             return new Response(`ASSETS.fetch 404 for ${assetPath}.`, { status: 404 });
+        } catch (e) {
+             console.error(`[SIMPLE] ASSETS.fetch error:`, e);
+             return new Response(`ASSETS.fetch Error: ${e.message}`, { status: 500 });
         }
-        console.log(`[ASSETS] env.ASSETS.fetch successful for ${assetPath}`);
-        return assetResponse;
-
-    } catch (e) {
-         console.error(`[ASSETS] Error during env.ASSETS.fetch for ${assetPath}:`, e);
-         return new Response(`Internal Server Error during ASSETS.fetch: ${e.message}`, { status: 500 });
     }
+
+    console.log(`[SIMPLE] Path ${pathname} not matched. 404.`);
+    return new Response(`Not Found: ${pathname}`, { status: 404 });
 }
