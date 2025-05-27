@@ -1,0 +1,76 @@
+/* Retro Terminal Theme */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+:root {
+  --background: #0a0a2a; --container: #0a0a2a; --border: #33ff33;
+  --text: #33ff33; --header: #66ff66; --link: #ffff33; --code-bg: #1a1a3a;
+  --muted: #00cc00;
+}
+body {
+    font-family: 'VT323', "Courier New", Courier, monospace;
+    line-height: 1.5;
+    color: var(--text);
+    background-color: var(--background);
+    margin: 0;
+    padding: 0;
+    font-size: 18px; /* Larger base font size for terminal feel */
+    text-shadow: 0 0 3px var(--text); /* Scan line / glow effect */
+}
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px 40px;
+    background-color: var(--container);
+    border: 2px solid var(--border);
+    border-radius: 0;
+    box-shadow: 0 0 15px var(--border);
+}
+h1,h2,h3,h4,h5,h6 {
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: normal;
+    line-height: 1.25;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: .3em;
+    color: var(--header);
+    text-transform: uppercase;
+}
+h1 { font-size: 1.8em; } h2 { font-size: 1.5em; } h3 { font-size: 1.25em; }
+p { margin-top: 0; margin-bottom: 16px; color: var(--text); }
+p::before { content: "> "; } /* Add prompt indicator */
+ul,ol { margin-top:0; margin-bottom:16px; padding-left:2em; list-style: none; }
+li::before { content: "* "; color: var(--link); }
+a { color: var(--link); text-decoration: underline; }
+a:hover { background-color: var(--link); color: var(--background); text-decoration: none; }
+code {
+    font-family: 'VT323', "Courier New", Courier, monospace;
+    font-size: 100%;
+    background-color: var(--code-bg);
+    border-radius: 0;
+    padding: .1em .3em;
+    margin: 0;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+pre {
+    font-family: 'VT323', "Courier New", Courier, monospace;
+    font-size: 100%;
+    line-height: 1.45;
+    background-color: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 0;
+    padding: 16px;
+    overflow: auto;
+    margin-bottom: 16px;
+    color: var(--text);
+}
+pre code { background-color: transparent; border: 0; }
+img { max-width: 100%; height: auto; background-color: #fff; border-radius: 0; box-sizing: border-box; margin-top: 16px; margin-bottom: 16px; border: 2px solid var(--border); filter: grayscale(100%) contrast(200%) brightness(1.5); }
+blockquote { margin: 0 0 16px 0; padding: 10px 15px; color: var(--muted); border: 1px dashed var(--border); background-color: var(--code-bg); }
+table { border-collapse: collapse; margin-bottom: 16px; width: 100%; display: block; overflow: auto; border: 1px solid var(--border); }
+th,td { border: 1px solid var(--border); padding: 6px 13px; }
+tr { background-color: var(--container); border-top: 1px solid var(--border); }
+tr:nth-child(2n) { background-color: var(--code-bg); }
+hr { height: 1px; padding: 0; margin: 24px 0; background-color: var(--border); border: 0; border-top: 1px dashed var(--border); }
+hr.readmesite-footer-separator { margin-top: 48px; margin-bottom: 24px; }
+div.readmesite-footer { text-align: center; font-size: 1em; color: var(--muted); padding-bottom: 10px; margin-top: 0; }
+div.readmesite-footer p { margin: 0; } div.readmesite-footer a { color: var(--link); }
