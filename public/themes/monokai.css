@@ -1,0 +1,68 @@
+/* Monokai Theme */
+:root {
+  --background: #272822; --container: #3e3d32; --foreground: #f8f8f2;
+  --comment: #75715e; --red: #f92672; --orange: #fd971f; --yellow: #e6db74;
+  --green: #a6e22e; --blue: #66d9ef; --purple: #ae81ff;
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    line-height: 1.6;
+    color: var(--foreground);
+    background-color: var(--background);
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px 40px;
+    background-color: var(--container);
+    border: 1px solid var(--comment);
+    border-radius: 6px;
+}
+h1,h2,h3,h4,h5,h6 {
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+    border-bottom: 1px solid var(--comment);
+    padding-bottom: .3em;
+    color: var(--blue);
+}
+h1 { font-size: 2em; } h2 { font-size: 1.5em; } h3 { font-size: 1.25em; }
+p { margin-top: 0; margin-bottom: 16px; color: var(--foreground); }
+ul,ol { margin-top:0; margin-bottom:16px; padding-left:2em; }
+a { color: var(--red); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 85%;
+    background-color: var(--background);
+    border-radius: 3px;
+    padding: .2em .4em;
+    margin: 0;
+    color: var(--green);
+}
+pre {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: var(--background);
+    border: 1px solid var(--comment);
+    border-radius: 6px;
+    padding: 16px;
+    overflow: auto;
+    margin-bottom: 16px;
+    color: var(--foreground);
+}
+pre code { background-color: transparent; border: 0; color: var(--foreground); }
+img { max-width: 100%; height: auto; background-color: var(--foreground); border-radius: 4px; box-sizing: border-box; margin-top: 16px; margin-bottom: 16px; }
+blockquote { margin: 0 0 16px 0; padding: 0 1em; color: var(--comment); border-left: .25em solid var(--purple); }
+table { border-collapse: collapse; margin-bottom: 16px; width: 100%; display: block; overflow: auto; border: 1px solid var(--comment); }
+th,td { border: 1px solid var(--comment); padding: 6px 13px; }
+tr { background-color: var(--container); border-top: 1px solid var(--comment); }
+tr:nth-child(2n) { background-color: #33342d; }
+hr { height: .25em; padding: 0; margin: 24px 0; background-color: var(--comment); border: 0; }
+hr.readmesite-footer-separator { height: 1px; margin-top: 48px; margin-bottom: 24px; }
+div.readmesite-footer { text-align: center; font-size: 0.85em; color: var(--comment); padding-bottom: 10px; margin-top: 0; }
+div.readmesite-footer p { margin: 0; } div.readmesite-footer a { color: var(--red); }
