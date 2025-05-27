@@ -1,0 +1,192 @@
+/* --- Light Mode (Default) --- */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    line-height: 1.6;
+    color: #24292e;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px 40px;
+    background-color: #ffffff;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+}
+h1,h2,h3,h4,h5,h6 {
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+    border-bottom: 1px solid #eaecef;
+    padding-bottom: .3em;
+    color: #24292e;
+}
+h1 { font-size: 2em; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.25em; }
+p {
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #24292e;
+}
+ul,ol {
+    margin-top:0;
+    margin-bottom:16px;
+    padding-left:2em;
+}
+a {
+    color: #0366d6;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 85%;
+    background-color: rgba(27,31,35,.05);
+    border-radius: 3px;
+    padding: .2em .4em;
+    margin: 0;
+    color: #24292e;
+}
+pre {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f6f8fa;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    padding: 16px;
+    overflow: auto;
+    margin-bottom: 16px;
+    color: #24292e;
+}
+pre code {
+    background-color: transparent;
+    border: 0;
+}
+img {
+    max-width: 100%;
+    height: auto;
+    background-color: #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+blockquote {
+    margin: 0 0 16px 0;
+    padding: 0 1em;
+    color: #6a737d;
+    border-left: .25em solid #dfe2e5;
+}
+table {
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    width: 100%;
+    display: block;
+    overflow: auto;
+    border: 1px solid #dfe2e5;
+}
+th,td {
+    border: 1px solid #dfe2e5;
+    padding: 6px 13px;
+}
+tr {
+    background-color: #ffffff;
+    border-top: 1px solid #c6cbd1;
+}
+tr:nth-child(2n) {
+    background-color: #f6f8fa;
+}
+hr {
+    height: .25em;
+    padding: 0;
+    margin: 24px 0;
+    background-color: #dfe2e5;
+    border: 0;
+}
+hr.readmesite-footer-separator {
+    height: 1px;
+    background-color: #d1d5da;
+    border: none;
+    margin-top: 48px;
+    margin-bottom: 24px;
+}
+div.readmesite-footer {
+    text-align: center;
+    font-size: 0.85em;
+    color: #586069;
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+div.readmesite-footer p { margin: 0; }
+div.readmesite-footer a { color: #0366d6; }
+
+/* --- Dark Mode --- */
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #e0e0e0;
+        background-color: #1a1a1a;
+    }
+    .container {
+        background-color: #2c2c2c;
+        border: 1px solid #444;
+    }
+    h1,h2,h3,h4,h5,h6 {
+        border-bottom: 1px solid #555;
+        color: #f0f0f0;
+    }
+    p {
+        color: #ccc;
+    }
+    a {
+        color: #58a6ff;
+    }
+    code {
+        background-color: rgba(200, 200, 200, .1);
+        color: #c9d1d9;
+    }
+    pre {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        color: #c9d1d9;
+    }
+    img {
+        background-color: #fff; /* Keep background for transparent images */
+    }
+    blockquote {
+        color: #8b949e;
+        border-left: .25em solid #30363d;
+    }
+    table {
+        border: 1px solid #30363d;
+    }
+    th,td {
+        border: 1px solid #30363d;
+    }
+    tr {
+        background-color: #2c2c2c;
+        border-top: 1px solid #30363d;
+    }
+    tr:nth-child(2n) {
+        background-color: #222;
+    }
+    hr {
+        background-color: #30363d;
+    }
+    hr.readmesite-footer-separator {
+        height: 2px;
+        background-color: #444;
+    }
+    div.readmesite-footer {
+        color: #888;
+    }
+    div.readmesite-footer a {
+        color: #58a6ff;
+    }
+}
